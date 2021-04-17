@@ -112,7 +112,7 @@ function Find-Manifest($app, $bucket) {
 }
 
 function dl_with_cache($app, $version, $url, $to, $cookies = $null, $use_cache = $true) {
-    $cached = fullpath (cache_path $app $version $url)
+    $cached = fullpath (cache_path $app $version)
 
     if(!(test-path $cached) -or !$use_cache) {
         ensure $cachedir | Out-Null
