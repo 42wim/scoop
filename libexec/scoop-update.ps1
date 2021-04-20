@@ -212,7 +212,7 @@ function update($app, $global, $quiet = $false, $independent, $suggested, $use_c
 
             if ($check_hash) {
                 $manifest_hash = hash_for_url $manifest $url $architecture
-                $source = fullpath (cache_path $app $version $url)
+                $source = fullpath (cache_path $app $version)
                 $ok, $err = check_hash $source $manifest_hash $(show_app $app $bucket)
 
                 if (!$ok) {
