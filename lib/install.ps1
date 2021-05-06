@@ -112,7 +112,8 @@ function Find-Manifest($app, $bucket) {
 }
 
 function dl_with_cache($app, $version, $url, $to, $cookies = $null, $use_cache = $true) {
-    $cached = fullpath (cache_path $app $version)
+    $urlhash = compute_string_hash $url
+    $cached = fullpath (cache_path $app $version $urlhash)
 
     if(!(test-path $cached) -or !$use_cache) {
         ensure $cachedir | Out-Null
@@ -716,6 +717,20 @@ function compute_hash($file, $algname) {
         if($alg) { $alg.dispose() }
     }
     return ''
+}
+
+function compute_string_hash($text) {
+    $HashName = "MD5"
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($text)
+    $algorithm = [System.Security.Cryptography.HashAlgorithm]::Create('MD5')
+    $StringBuilder = New-Object System.Text.StringBuilder
+
+    $algorithm.ComputeHash($bytes) |
+    ForEach-Object {
+        $null = $StringBuilder.Append($_.ToString("x2"))
+    }
+
+    return $StringBuilder.ToString()
 }
 
 # for dealing with installers
